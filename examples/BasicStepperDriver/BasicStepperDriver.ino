@@ -14,7 +14,8 @@
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
-#define RPM 120
+// #define RPM 120
+#define RPM         MAX_RPM
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // If it doesn't, the motor will move at a different RPM than chosen
@@ -22,8 +23,8 @@
 #define MICROSTEPS 1
 
 // All the wires needed for full functionality
-#define DIR     PIN_5_DIR
-#define STEP    PIN_5_STEP
+#define DIR     PIN_0_DIR
+#define STEP    PIN_0_STEP
 //Uncomment line to use enable/disable functionality
 //#define SLEEP 13
 
@@ -40,11 +41,8 @@ void setup() {
 }
 
 void loop() {
-    for (uint8_t i = 0; i < 10; i++) {
-        stepper.rotate(360 * 75);
-        stepper.move(-MOTOR_STEPS*MICROSTEPS * 75);
-        delay(10000);
-    }
+    stepper.rotate(360);
+    stepper.move(-MOTOR_STEPS*MICROSTEPS);
     // // energize coils - the motor will hold position
     // // stepper.enable();
   

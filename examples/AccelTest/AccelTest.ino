@@ -46,7 +46,7 @@
 #define MODE1   PC9
 #define MODE2   PA7
 // DRV8825 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, MODE0, MODE1, MODE2);
-DRV8825 stepper(MOTOR_STEPS, DIR, STEP, MODE0, MODE1, MODE2);
+DRV8825 stepper(MOTOR_STEPS, DIR, STEP);
 
 // #include "DRV8880.h"
 // #define M0 10
@@ -81,7 +81,7 @@ void setup() {
      * stepper.rotate(360);
      */
     //  stepper.startRotate(360);
-     stepper.startRotate(360 * 30);
+     stepper.startRotate(-1 * 360 * 30);
      while (true) {
          stepper.nextAction();
      }
