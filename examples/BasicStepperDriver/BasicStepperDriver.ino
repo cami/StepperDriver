@@ -10,6 +10,7 @@
  */
 #include <Arduino.h>
 #include "BasicStepperDriver.h"
+#include <pin_config.h>
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
@@ -21,8 +22,8 @@
 #define MICROSTEPS 1
 
 // All the wires needed for full functionality
-#define DIR 8
-#define STEP 9
+#define DIR     PIN_5_DIR
+#define STEP    PIN_5_STEP
 //Uncomment line to use enable/disable functionality
 //#define SLEEP 13
 
@@ -39,22 +40,26 @@ void setup() {
 }
 
 void loop() {
+    for (uint8_t i = 0; i < 10; i++) {
+        stepper.rotate(360 * 75);
+        stepper.move(-MOTOR_STEPS*MICROSTEPS * 75);
+        delay(10000);
+    }
+    // // energize coils - the motor will hold position
+    // // stepper.enable();
   
-    // energize coils - the motor will hold position
-    // stepper.enable();
-  
-    /*
-     * Moving motor one full revolution using the degree notation
-     */
-    stepper.rotate(360);
+    // /*
+    //  * Moving motor one full revolution using the degree notation
+    //  */
+    // stepper.rotate(360);
 
-    /*
-     * Moving motor to original position using steps
-     */
-    stepper.move(-MOTOR_STEPS*MICROSTEPS);
+    // /*
+    //  * Moving motor to original position using steps
+    //  */
+    // stepper.move(-MOTOR_STEPS*MICROSTEPS);
 
-    // pause and allow the motor to be moved by hand
-    // stepper.disable();
+    // // pause and allow the motor to be moved by hand
+    // // stepper.disable();
 
     delay(5000);
 }
