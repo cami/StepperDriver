@@ -7,30 +7,33 @@
  * A copy of this license has been included with this distribution in the file LICENSE.
  */
 #include <Arduino.h>
+#include <pin_config.h>
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
 // Target RPM for cruise speed
-#define RPM 120
+// #define RPM 120
+#define RPM         MAX_RPM
 // Acceleration and deceleration values are always in FULL steps / s^2
 #define MOTOR_ACCEL 2000
 #define MOTOR_DECEL 1000
 
 // Microstepping mode. If you hardwired it to save pins, set to the same value here.
-#define MICROSTEPS 16
+// #define MICROSTEPS 16
+#define MICROSTEPS 1
 
-#define DIR 8
-#define STEP 9
-#define SLEEP 13 // optional (just delete SLEEP from everywhere if not used)
+#define DIR     PIN_5_DIR
+#define STEP    PIN_5_STEP
+// #define SLEEP 13 // optional (just delete SLEEP from everywhere if not used)
 
 /*
  * Choose one of the sections below that match your board
  */
 
-#include "DRV8834.h"
-#define M0 10
-#define M1 11
-DRV8834 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, M0, M1);
+// #include "DRV8834.h"
+// #define M0 10
+// #define M1 11
+// DRV8834 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, M0, M1);
 
 // #include "A4988.h"
 // #define MS1 10
@@ -38,11 +41,12 @@ DRV8834 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, M0, M1);
 // #define MS3 12
 // A4988 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, MS1, MS2, MS3);
 
-// #include "DRV8825.h"
-// #define MODE0 10
-// #define MODE1 11
-// #define MODE2 12
+#include "DRV8825.h"
+#define MODE0   PC8
+#define MODE1   PC9
+#define MODE2   PA7
 // DRV8825 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, MODE0, MODE1, MODE2);
+DRV8825 stepper(MOTOR_STEPS, DIR, STEP, MODE0, MODE1, MODE2);
 
 // #include "DRV8880.h"
 // #define M0 10
@@ -56,6 +60,7 @@ DRV8834 stepper(MOTOR_STEPS, DIR, STEP, SLEEP, M0, M1);
 
 void setup() {
     Serial.begin(115200);
+    delay(4000);
 
     stepper.begin(RPM, MICROSTEPS);
     // if using enable/disable on ENABLE pin (active LOW) instead of SLEEP uncomment next line
@@ -75,20 +80,24 @@ void setup() {
      * We could have just as easily replace everything below this line with 
      * stepper.rotate(360);
      */
-     stepper.startRotate(360);
+    //  stepper.startRotate(360);
+     stepper.startRotate(360 * 30);
+     while (true) {
+         stepper.nextAction();
+     }
 }
 
 void loop() {
-    static int step = 0;
-    unsigned wait_time = stepper.nextAction();
-    if (wait_time){
-        Serial.print("  step="); Serial.print(step++);
-        Serial.print("  dt="); Serial.print(wait_time);
-        Serial.print("  rpm="); Serial.print(stepper.getCurrentRPM());
-        Serial.println();
-    } else {
-        stepper.disable();
-        Serial.println("END");
-        delay(3600000);
-    }
+    // static int step = 0;
+    // unsigned wait_time = stepper.nextAction();
+    // if (wait_time){
+    //     Serial.print("  step="); Serial.print(step++);
+    //     Serial.print("  dt="); Serial.print(wait_time);
+    //     Serial.print("  rpm="); Serial.print(stepper.getCurrentRPM());
+    //     Serial.println();
+    // } else {
+    //     stepper.disable();
+    //     Serial.println("END");
+    //     delay(3600000);
+    // }
 }
