@@ -71,10 +71,6 @@ void setup() {
     // stepperZ.setEnableActiveState(LOW);
 }
 
-long converter(int distance_mm) {
-    return (distance_mm / MILIMETER_PER_ROTATION) * DEGREE_PER_ROTATION;
-}
-
 void loop() {
 
     controller.rotate(-1080, -1080);
